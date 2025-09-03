@@ -9,8 +9,9 @@ import math
 
 warnings.filterwarnings('ignore')
 
-# Add project path
-sys.path.append('/Users/aditya/PycharmProjects/PAlibaba_hackathon')
+# Add current directory to path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir)
 
 print("🔧 Installing required packages...")
 

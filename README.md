@@ -1,27 +1,27 @@
-# 🚀 Crypto AI Analysis Platform
+# Crypto AI Analysis Platform
 
 A comprehensive cryptocurrency analysis platform powered by **DeepSeek AI**, combining real-time data, sentiment analysis, and technical indicators for professional trading insights.
 
-## 🌟 Key Features
+##  Key Features
 
-### 🤖 **Interactive AI Chatbot**
+###  **Interactive AI Chatbot**
 - **DeepSeek AI Integration** - Context-aware responses with professional trading advice
 - **Dynamic Analysis** - Automatically detects and analyzes any cryptocurrency you mention
 - **Real-time Recommendations** - BUY/HOLD/SELL signals with confidence levels
 
-### 📊 **Comprehensive Data Analysis**
+###  **Comprehensive Data Analysis**
 - **Real-time Price Data** - Live cryptocurrency prices from Binance API
 - **Sentiment Analysis** - Multi-source news analysis (VADER, TextBlob, AI)
 - **Technical Analysis** - 32+ indicators + TradingView professional insights
 - **Risk Assessment** - Price targets, stop losses, confidence scoring
 
-### 🎮 **Multiple Interfaces**
+###  **Multiple Interfaces**
 - **Terminal Interface** - `python deepseek_crypto_master.py` (Interactive chatbot)
 - **Jupyter Notebook** - `deepseek_crypto_master.ipynb` (Complete analysis)
 - **Web Interface** - `crypto_gradio_app.py` (User-friendly GUI)
 - **Sentiment Only** - `python sentiment_analysis.py Bitcoin` (Quick analysis)
 
-## 🚀 Quick Start
+##  Quick Start
 
 ### **1. Setup**
 ```bash
@@ -49,25 +49,25 @@ TAVILY_API_KEY=your_tavily_key_here
 
 ### **3. Run the Platform**
 
-#### **🎯 Terminal Interface (Recommended)**
+#### ** Terminal Interface (Recommended)**
 ```bash
 python deepseek_crypto_master.py
 ```
 **Interactive chatbot - ask about any cryptocurrency!**
 
-#### **📊 Jupyter Notebook**
+#### ** Jupyter Notebook**
 ```bash
 jupyter notebook deepseek_crypto_master.ipynb
 ```
 **Complete analysis pipeline with visualizations**
 
-#### **🌐 Web Interface**
+#### ** Web Interface**
 ```bash
 python crypto_gradio_app.py
 ```
 **User-friendly web interface at http://localhost:7860**
 
-## 💬 Example Usage
+##  Example Usage
 
 ### **Terminal Chatbot**
 ```
@@ -96,7 +96,7 @@ python crypto_gradio_app.py
 - "What are the key technical levels for SOL?"
 - "Compare Bitcoin and Ethereum"
 
-## 📊 Supported Cryptocurrencies
+##  Supported Cryptocurrencies
 
 **Auto-detects and analyzes:**
 - Bitcoin (`bitcoin`, `btc`)
@@ -108,20 +108,20 @@ python crypto_gradio_app.py
 - Avalanche (`avalanche`, `avax`)
 - Polkadot (`polkadot`, `dot`)
 
-## 🏗️ Architecture
+##  Architecture
 
-### **📁 Core Components**
+### ** Core Components**
 ```
-├── deepseek_crypto_master.py     # 🎯 Terminal interface
-├── deepseek_crypto_master.ipynb  # 📊 Complete notebook
-├── crypto_analysis.py            # 💰 Price & technical analysis
-├── sentiment_analysis.py         # 🔍 Multi-source sentiment
-├── web_scraping.py              # 🌐 Data collection
-├── crypto_ta_simple.py          # 📈 Technical indicators
-└── binance_api.py               # 🔗 Binance integration
+├── deepseek_crypto_master.py     #  Terminal interface
+├── deepseek_crypto_master.ipynb  #  Complete notebook
+├── crypto_analysis.py            #  Price & technical analysis
+├── sentiment_analysis.py         #  Multi-source sentiment
+├── web_scraping.py              #  Data collection
+├── crypto_ta_simple.py          #  Technical indicators
+└── binance_api.py               #  Binance integration
 ```
 
-### **🔄 5-Step Analysis Pipeline**
+### ** 5-Step Analysis Pipeline**
 1. **Price & Technical Analysis** - Real-time Binance data + indicators
 2. **Sentiment Analysis** - News scraping + VADER/TextBlob/AI scoring
 3. **TradingView Analysis** - Professional trading ideas scraping
@@ -130,48 +130,48 @@ python crypto_gradio_app.py
 
 ## 🔧 Technologies
 
-### **🤖 AI & APIs**
+### ** AI & APIs**
 - **DeepSeek AI** (via OpenRouter) - Market analysis and recommendations
 - **Binance API** - Real-time cryptocurrency data
 - **TradingView** - Professional technical analysis
 - **Tavily API** - Enhanced news search
 
-### **📊 Data Analysis**
+### ** Data Analysis**
 - **Python** - Core programming language
 - **Pandas, NumPy** - Data processing and analysis
 - **VADER Sentiment** - Social media sentiment analysis
 - **TextBlob** - Natural language processing
 
-### **🎮 Interfaces**
+### ** Interfaces**
 - **Jupyter Notebooks** - Interactive analysis environment
 - **Gradio** - Web interface framework
 - **Terminal Interface** - Command-line interaction
 
-## 🎯 Use Cases
+##  Use Cases
 
-### **🏦 Professional Trading**
+### ** Professional Trading**
 - Real-time market analysis
 - Risk assessment and position sizing
 - Entry/exit point identification
 - Portfolio management insights
 
-### **📚 Educational**
+### ** Educational**
 - Learn AI integration in finance
 - Understand sentiment analysis
 - Practice technical analysis
 - Study market data processing
 
-### **🔬 Research & Development**
+### ** Research & Development**
 - Market sentiment tracking
 - Algorithm development
 - Data science projects
 - AI model training
 
-## 🚨 Disclaimer
+##  Disclaimer
 
 This platform is for educational and research purposes. **Not financial advice.** Always do your own research and consult with financial professionals before making investment decisions.
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -179,11 +179,11 @@ This platform is for educational and research purposes. **Not financial advice.*
 4. Add tests and documentation
 5. Submit a pull request
 
-## 📄 License
+##  License
 
 MIT License - see LICENSE file for details.
 
-## 🙏 Acknowledgments
+##  Acknowledgments
 
 - **DeepSeek AI** for advanced language model capabilities
 - **Binance** for comprehensive cryptocurrency data
@@ -192,7 +192,7 @@ MIT License - see LICENSE file for details.
 
 ---
 
-**🚀 Ready to analyze the crypto markets with AI power!**
+** Ready to analyze the crypto markets with AI power!**
 
 *Built for the Alibaba Hackathon - Showcasing AI-powered financial analysis*
 

@@ -36,7 +36,7 @@ except ImportError as e:
 app = Flask(__name__)
 
 # Backend API URL
-BACKEND_URL = "http://localhost:5001"
+BACKEND_URL = "http://localhost:8000"
 
 # Store chatbot sessions
 sessions = {}
@@ -333,7 +333,7 @@ def send_frontend_message():
 if __name__ == '__main__':
     logger.info("🚀 Starting Frontend Server")
     logger.info("📡 Frontend will be available at: http://localhost:3000")
-    logger.info("🔗 Backend API expected at: http://localhost:5001")
+    logger.info("🔗 Backend API expected at: http://localhost:8000")
     logger.info(f"🤖 Chatbot modules: {'✅ Available' if CHATBOT_AVAILABLE else '❌ Not Available'}")
     
     app.run(debug=True, host='0.0.0.0', port=3000)

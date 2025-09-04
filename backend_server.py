@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 🔧 Backend Server - Trading Engine API
-Runs on port 5001 with detailed logging
+Runs on port 8000 with detailed logging
 """
 
 import os
@@ -12,16 +12,24 @@ import uuid
 from datetime import datetime
 from flask import Flask, request, jsonify
 
-# Setup logging
+# Setup enhanced logging
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - BACKEND - %(levelname)s - %(message)s',
+    format='%(asctime)s - BACKEND:8000 - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s',
     handlers=[
         logging.FileHandler('backend.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Log startup information
+logger.info("=" * 60)
+logger.info("🚀 BACKEND SERVER STARTING UP")
+logger.info(f"📅 Startup Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+logger.info(f"🐍 Python Version: {sys.version}")
+logger.info(f"📂 Working Directory: {os.getcwd()}")
+logger.info("=" * 60)
 
 # Import trading components
 try:
@@ -35,13 +43,25 @@ except ImportError as e:
 
 app = Flask(__name__)
 
-# Simple CORS headers
+# Simple CORS headers with logging
 @app.after_request
 def after_request(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
     response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
     return response
+
+# Request logging middleware
+@app.before_request
+def log_request_info():
+    logger.info(f"📥 {request.method} {request.path} from {request.remote_addr}")
+    if request.method in ['POST', 'PUT', 'PATCH'] and request.is_json:
+        try:
+            body = request.get_json()
+            if body:
+                logger.debug(f"📄 Request body: {body}")
+        except Exception:
+            pass  # Ignore JSON parsing errors
 
 # Store chatbot sessions
 sessions = {}
@@ -58,7 +78,7 @@ def health_check():
         'trading_available': TRADING_AVAILABLE,
         'active_sessions': len(sessions),
         'timestamp': datetime.now().isoformat(),
-        'server': 'Backend (Port 5001)'
+        'server': 'Backend (Port 8000)'
     }
     
     logger.info(f"✅ Health check: {len(sessions)} active sessions, trading: {TRADING_AVAILABLE}")
@@ -338,10 +358,15 @@ def list_sessions():
         }), 500
 
 if __name__ == '__main__':
-    logger.info("🚀 Starting Backend Trading Server")
-    logger.info("📡 Backend API will be available at: http://localhost:5001")
+    logger.info("=" * 60)
+    logger.info("🚀 STARTING BACKEND TRADING SERVER")
+    logger.info("=" * 60)
+    logger.info("📡 Backend API will be available at: http://localhost:8000")
     logger.info(f"💰 Trading Engine: {'✅ Available' if TRADING_AVAILABLE else '❌ Not Available'}")
-    
+    logger.info(f"🔧 Debug Mode: Enabled")
+    logger.info(f"🌐 Host: 0.0.0.0 (All interfaces)")
+    logger.info(f"🔌 Port: 8000")
+
     if TRADING_AVAILABLE:
         logger.info("📋 Available endpoints:")
         logger.info("  - POST /api/session/create - Create trading session")
@@ -350,5 +375,17 @@ if __name__ == '__main__':
         logger.info("  - POST /api/session/{id}/trade - Execute trade")
         logger.info("  - GET /api/crypto/price/{symbol} - Get price")
         logger.info("  - GET /api/health - Health check")
-    
-    app.run(debug=True, host='0.0.0.0', port=5001)
+        logger.info("  - GET /api/sessions - List all sessions")
+
+    logger.info("=" * 60)
+    logger.info("🎯 Server starting... Press Ctrl+C to stop")
+    logger.info("=" * 60)
+
+    try:
+        app.run(debug=True, host='0.0.0.0', port=8000)
+    except KeyboardInterrupt:
+        logger.info("🛑 Server stopped by user")
+    except Exception as e:
+        logger.error(f"❌ Server error: {e}")
+    finally:
+        logger.info("👋 Backend server shutdown complete")

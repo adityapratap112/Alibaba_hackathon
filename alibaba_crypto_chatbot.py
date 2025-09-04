@@ -33,12 +33,67 @@ class AlibabaAI:
             self.available = True
     
     def get_crypto_price(self, crypto_symbol):
-        """Get real-time crypto price from CoinGecko"""
+        """Get real-time crypto price from Binance (primary) with CoinGecko fallback"""
+        # Try Binance first
+        binance_result = self._get_binance_price(crypto_symbol)
+        if binance_result.get('success'):
+            return binance_result
+
+        # Fallback to CoinGecko
+        print(f"⚠️  Binance failed, trying CoinGecko fallback...")
+        return self._get_coingecko_price(crypto_symbol)
+
+    def _get_binance_price(self, crypto_symbol):
+        """Get price from Binance API"""
+        try:
+            # Map symbols to Binance trading pairs
+            symbol_map = {
+                'BTC': 'BTCUSDT',
+                'ETH': 'ETHUSDT',
+                'SOL': 'SOLUSDT',
+                'ADA': 'ADAUSDT',
+                'MATIC': 'MATICUSDT',
+                'LINK': 'LINKUSDT',
+                'AVAX': 'AVAXUSDT',
+                'DOT': 'DOTUSDT'
+            }
+
+            trading_pair = symbol_map.get(crypto_symbol.upper())
+            if not trading_pair:
+                return {'success': False, 'error': f'Symbol {crypto_symbol} not supported on Binance'}
+
+            # Get 24hr ticker statistics
+            url = f"https://api.binance.com/api/v3/ticker/24hr"
+            params = {'symbol': trading_pair}
+
+            response = requests.get(url, params=params, timeout=10)
+
+            if response.status_code == 200:
+                data = response.json()
+                return {
+                    'success': True,
+                    'symbol': crypto_symbol.upper(),
+                    'current_price': float(data['lastPrice']),
+                    'price_change_24h': float(data['priceChangePercent']),
+                    'volume_24h': float(data['volume']) * float(data['lastPrice']),  # Volume in USD
+                    'high_24h': float(data['highPrice']),
+                    'low_24h': float(data['lowPrice']),
+                    'timestamp': datetime.now().isoformat(),
+                    'source': 'Binance'
+                }
+            else:
+                return {'success': False, 'error': f'Binance API error: {response.status_code}'}
+
+        except Exception as e:
+            return {'success': False, 'error': f'Binance fetch error: {str(e)}'}
+
+    def _get_coingecko_price(self, crypto_symbol):
+        """Get price from CoinGecko API (fallback)"""
         try:
             # Map common symbols to CoinGecko IDs
             symbol_map = {
                 'BTC': 'bitcoin',
-                'ETH': 'ethereum', 
+                'ETH': 'ethereum',
                 'SOL': 'solana',
                 'ADA': 'cardano',
                 'MATIC': 'polygon',
@@ -46,9 +101,9 @@ class AlibabaAI:
                 'AVAX': 'avalanche-2',
                 'DOT': 'polkadot'
             }
-            
+
             coin_id = symbol_map.get(crypto_symbol.upper(), crypto_symbol.lower())
-            
+
             url = f"https://api.coingecko.com/api/v3/simple/price"
             params = {
                 'ids': coin_id,
@@ -57,9 +112,9 @@ class AlibabaAI:
                 'include_market_cap': 'true',
                 'include_24hr_vol': 'true'
             }
-            
+
             response = requests.get(url, params=params, timeout=10)
-            
+
             if response.status_code == 200:
                 data = response.json()
                 if coin_id in data:
@@ -71,13 +126,14 @@ class AlibabaAI:
                         'price_change_24h': price_info.get('usd_24h_change', 0),
                         'market_cap': price_info.get('usd_market_cap', 0),
                         'volume_24h': price_info.get('usd_24h_vol', 0),
-                        'timestamp': datetime.now().isoformat()
+                        'timestamp': datetime.now().isoformat(),
+                        'source': 'CoinGecko'
                     }
-            
-            return {'success': False, 'error': 'Price data not found'}
-            
+
+            return {'success': False, 'error': 'CoinGecko: Price data not found'}
+
         except Exception as e:
-            return {'success': False, 'error': f'Price fetch error: {str(e)}'}
+            return {'success': False, 'error': f'CoinGecko fetch error: {str(e)}'}
     
     def chat_response(self, user_message, context_data=None):
         """Interactive chat response with context and real-time prices"""
@@ -108,11 +164,23 @@ class AlibabaAI:
         
         # Add real-time price data if available
         if price_data:
-            prompt_parts.append(f"\nREAL-TIME PRICE DATA for {price_data['symbol']}:")
+            data_source = price_data.get('source', 'Unknown')
+            prompt_parts.append(f"\nREAL-TIME PRICE DATA for {price_data['symbol']} (Source: {data_source}):")
             prompt_parts.append(f"Current Price: ${price_data['current_price']:,.2f}")
             prompt_parts.append(f"24h Change: {price_data['price_change_24h']:+.2f}%")
-            prompt_parts.append(f"Market Cap: ${price_data['market_cap']:,.0f}")
+
+            # Add market cap if available (CoinGecko)
+            if 'market_cap' in price_data and price_data['market_cap']:
+                prompt_parts.append(f"Market Cap: ${price_data['market_cap']:,.0f}")
+
+            # Add volume
             prompt_parts.append(f"24h Volume: ${price_data['volume_24h']:,.0f}")
+
+            # Add high/low if available (Binance)
+            if 'high_24h' in price_data:
+                prompt_parts.append(f"24h High: ${price_data['high_24h']:,.2f}")
+                prompt_parts.append(f"24h Low: ${price_data['low_24h']:,.2f}")
+
             prompt_parts.append(f"Data Time: {price_data['timestamp']}")
         
         # Add context data if available
